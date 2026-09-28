@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Price Shocks & Protest — Research Proposal</title>
+<style>
+  :root {
+    --ink: #1c1a17;
+    --paper: #f7f4ee;
+    --line: #d8d2c4;
+    --accent: #a13d2b;
+    --muted: #6b6558;
+    --panel: #efe9dc;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    line-height: 1.6;
+    overflow: hidden;
+  }
+
+  .deck {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 6vw;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .slide.active {
+    display: flex;
+    opacity: 1;
+  }
+  .slide-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .kicker {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+  }
+  .num {
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 4.6vw, 3.2rem);
+    line-height: 1.15;
+    margin: 0 0 1.5rem;
+    font-weight: 600;
+  }
+  h2 {
+    font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+    margin: 0 0 1.4rem;
+    font-weight: 600;
+  }
+  p { margin: 0 0 1.1rem; max-width: 65ch; font-size: 1.05rem; }
+  .lede { font-size: 1.15rem; color: #3a362f; max-width: 62ch; }
+
+  .question-box {
+    background: var(--panel);
+    border-left: 3px solid var(--accent);
+    padding: 1.3rem 1.6rem;
+    margin: 1.5rem 0;
+    font-size: 1.15rem;
+    font-style: italic;
+  }
+  .var-pair {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+  }
+  .var-card {
+    flex: 1;
+    min-width: 220px;
+    border: 1px solid var(--line);
+    padding: 1.2rem 1.4rem;
+    background: #fdfcf9;
+  }
+  .var-card .label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+    font-style: italic;
+  }
+  .lit-group { margin: 1.6rem 0; }
+  .lit-group h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.5rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .placeholder {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+
+  .nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    z-index: 20;
+  }
+  .nav-btn:hover { background: var(--panel); border-color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+  .nav-btn:disabled:hover { background: none; border-color: var(--line); }
+  #prevBtn { left: 2vw; }
+  #nextBtn { right: 2vw; }
+
+  .progress-wrap {
+    position: fixed;
+    bottom: 1.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 20;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--line);
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dot.active { background: var(--accent); transform: scale(1.3); }
+
+  .slide-count {
+    position: fixed;
+    top: 1.4rem;
+    right: 2vw;
+    font-size: 0.85rem;
+    color: var(--muted);
+    z-index: 20;
+  }
+
+  @media (max-width: 640px) {
+    .nav-btn { width: 38px; height: 38px; font-size: 1.1rem; }
+    .slide { padding: 2.2rem 6vw; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <div class="slide active" data-index="0">
+    <div class="slide-inner">
+      <div class="kicker">PLS 210 · Research Design Presentation</div>
+      <h1>Price Shocks, Regions, and the Roots of Protest</h1>
+      <p class="lede">In January 2022, a fuel price hike in one western Kazakhstani town set off the largest unrest the country had seen since independence. This project asks whether that pattern holds more broadly — do regions with larger price increases consistently see more protest?</p>
+    </div>
+  </div>
+
+  <div class="slide" data-index="1">
+    <div class="slide-inner">
+      <div class="num">01 · Research Question</div>
+      <h2>Research Question</h2>
+      <p class="placeholder">[Replace with your own framing of the puzzle and why it matters — one or two sentences before the boxed question.]</p>
+      <div class="question-box">
+        To what extent do larger regional increases in fuel prices predict a higher frequency of protest events across Kazakhstan's regions?
+      </div>
+      <p class="placeholder">[Add: why this question is empirical, scoped, and answerable — the "so what?"]</p>
+    </div>
+  </div>
+
+  <div class="slide" data-index="2">
+    <div class="slide-inner">
+      <div class="num">02 · Positioning</div>
+      <h2>Epistemological Positioning</h2>
+      <p class="placeholder">[Explain, in your own words, why this question sits in the positivist tradition — observable variables, a testable relationship, hypotheses stated in advance.]</p>
+    </div>
+  </div>
+
+  <div class="slide" data-index="3">
+    <div class="slide-inner">
+      <div class="num">03 · Contribution</div>
+      <h2>Contribution</h2>
+      <p class="placeholder">[State the gap: existing work covers political and ethnic drivers of the 2022 unrest more than economic ones, and most designs use a single national event rather than regional variation. Explain what your project adds.]</p>
+    </div>
+  </div>
+
+  <div class="slide" data-index="4">
+    <div class="slide-inner">
+      <div class="num">04 · Literature Review</div>
+      <h2>Literature Review</h2>
+      <div class="lit-group">
+        <h3>Consensus</h3>
+        <p class="placeholder">[Where do sources agree? e.g., relative deprivation theory links the gap between expectation and reality to protest.]</p>
+      </div>
+      <div class="lit-group">
+        <h3>Disagreement</h3>
+        <p class="placeholder">[Where do sources diverge? e.g., some studies find average deprivation predicts protest; others find polarization of grievance matters more than the average level.]</p>
+      </div>
+      <div class="lit-group">
+        <h3>Gaps</h3>
+        <p class="placeholder">[What's missing? e.g., limited region-level economic analysis of Kazakhstan's 2022 unrest specifically.]</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-index="5">
+    <div class="slide-inner">
+      <div class="num">05 · Theory</div>
+      <h2>Theory &amp; Hypotheses</h2>
+      <p class="placeholder">[Lay out the deductive logic: price shock → widened expectation gap → grievance → protest. Name your theory (e.g., relative deprivation).]</p>
+      <div class="var-pair">
+        <div class="var-card">
+          <div class="label">Independent Variable</div>
+          Regional fuel price increase
+        </div>
+        <div class="var-card">
+          <div class="label">Dependent Variable</div>
+          Frequency of protest events
+        </div>
+      </div>
+      <div class="question-box">
+        H1: Regions with larger fuel price increases will have more protest events than regions with smaller increases.
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-index="6">
+    <div class="slide-inner">
+      <div class="num">06 · AI Statement</div>
+      <h2>AI Transparency Statement</h2>
+      <p class="placeholder">[~30 seconds spoken: what AI helped with — e.g., building this page's layout, locating and summarizing sources — versus what is your own work — the research question, positioning, and argument.]</p>
+    </div>
+  </div>
+
+</div>
+
+<button class="nav-btn" id="prevBtn" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn" id="nextBtn" aria-label="Next slide">&#8594;</button>
+<div class="slide-count" id="slideCount"></div>
+<div class="progress-wrap" id="dots"></div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let current = 0;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dotsWrap = document.getElementById('dots');
+  const countEl = document.getElementById('slideCount');
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'dot';
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(dot);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function render() {
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+    countEl.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(total - 1, i));
+    render();
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') goTo(current + 1);
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+  });
+
+  let touchStartX = null;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx > 50) goTo(current - 1);
+    if (dx < -50) goTo(current + 1);
+    touchStartX = null;
+  });
+
+  render();
+</script>
+
+</body>
+</html>
